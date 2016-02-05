@@ -26,8 +26,8 @@ class database{
 		$stmt->execute();
 		return $stmt->get_result();
 	}
-	public function idToValue($table, $target, $id, $condition = false){
-		$stmt = $this->db->prepare('SELECT ' . $target . ' FROM ' . $table . ' WHERE ' . $condition . ' = ' . $id);
+	public function idToValue($table, $target, $id){
+		$stmt = $this->db->prepare('SELECT ' . $target . ' FROM ' . $table . ' WHERE id = ' . $id);
 		$stmt->execute();
 		$result = $stmt->get_result()->fetch_row();
 		return $result;
