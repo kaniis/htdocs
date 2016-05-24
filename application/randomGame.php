@@ -48,8 +48,7 @@ foreach($civs as $key => $value)
 {
 	$results = $mysql->fetchRows('civilization', 'name', 'id', $value);
 	$resultsRow = $results->fetch_row();
-	echo 'Player ', $player, ': ', $resultsRow[0], '<br/>';
-	$player++;
+	echo 'Player ', $player++, ': ', $resultsRow[0], '<br/>';
 }
 
 $victories = ['time', 'domination', 'science', 'diplomatic', 'culture'];
