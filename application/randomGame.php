@@ -1,7 +1,6 @@
 <?php
 require '../classes/mysql.php';
-$mysql = new database();
-$mysql->connectDb();
+database::connectDb();
 
 function randDupCiv()
 {
@@ -17,12 +16,12 @@ function randDupCiv()
 	return $civs;
 }
 
-function randUniCiv($db)
+function randUniCiv()
 {
 	$mapSize = [2, 4, 6, 8, 10, 14];
 	$size = $mapSize[rand(0, 5)];
 	$civList = [];
-	$civRows = $db->fetchRows('civilization', 'id');
+	$civRows = database::fetchRows('civilization', 'id');
 	while($civ = $civRows->fetch_assoc())
 	{
 		$civList[] = $civ['id'];
@@ -40,13 +39,13 @@ function randUniCiv($db)
 	return $civs;
 }
 
-$civs = randUniCiv($mysql);
+$civs = randUniCiv();
 
 $player = 1;
 
 foreach($civs as $key => $value)
 {
-	$results = $mysql->fetchRows('civilization', 'name', 'id', $value);
+	$results = database::fetchRows('civilization', 'name', 'id', $value);
 	$resultsRow = $results->fetch_row();
 	echo 'Player ', $player++, ': ', $resultsRow[0], '<br/>';
 }

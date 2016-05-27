@@ -1,7 +1,7 @@
 <?php
 class database{
-	private $db;
-	public function addRow($table, $values)
+	private static $db;
+	public static function addRow($table, $values)
 	{
 		$columns = ' (';
 		$placeholders = '(';
@@ -39,20 +39,18 @@ class database{
 			$tmp[$key] = &$params[$key];
 		}
 
-		$stmt = $this->db->prepare($query);
+		$stmt = self::$db->prepare($query);
 		call_user_func_array(array($stmt, 'bind_param'), $tmp);
 		$stmt->execute();
 	}
 
-	public function connectDb()
+	public static function connectDb()
 	{
-		if(!isset($this->db))
-		{
-			$this->db = new mysqli('localhost', 'root', 'admin', 'school');
-		}
+
+		self::$db = new mysqli('localhost', 'root', 'admin', 'school');
 	}
 
-	public function fetchRows($table, $target, $condition = false, $value = false)
+	public static function fetchRows($table, $target, $condition = false, $value = false)
 	{
 		$query = 'SELECT ' . $target . ' FROM ' . $table;
 		if ($condition !== false)
@@ -60,7 +58,7 @@ class database{
 			$query .= ' WHERE ' . $condition . ' = ?';
 		}
 
-		$stmt = $this->db->prepare($query);
+		$stmt = self::$db->prepare($query);
 
 		if ($condition !== false)
 		{
@@ -72,9 +70,9 @@ class database{
 		return $stmt->get_result();
 	}
 
-	public function idToValue($table, $target, $id)
+	public static function idToValue($table, $target, $id)
 	{
-		$stmt = $this->db->prepare('SELECT ' . $target . ' FROM ' . $table . ' WHERE id = ' . $id);
+		$stmt = self::$db->prepare('SELECT ' . $target . ' FROM ' . $table . ' WHERE id = ' . $id);
 		$stmt->execute();
 		$result = $stmt->get_result()->fetch_row();
 		return $result;
