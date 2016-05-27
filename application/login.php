@@ -31,13 +31,25 @@ if (isset($_POST['submit']))
 		$mysql = new database();
 		$mysql->connectDb();
 		
-		$result = $mysql->fetchRows('users', 'name, pass', 'name' , $user[0]);
+		$result = $mysql->fetchRows('users', 'name, password', 'name' , $user[0]);
 
 		if($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) 
 			{ 
-				echo 'name: ' . $row[0] . '<br />' . 'password: ' . $row[1];
+				echo 'name: ' . $row['name'] . '<br />' . 'password: ' . $row['password'];
+				$db_name = $row['name'];
+				$db_pass = $row['password'];
 			}
+			
+			if ($db_pass == $user[1])
+			{
+				echo '<br />' . 'You are now logged in';
+			}
+			else
+			{
+				echo '<br />' . 'Your username or password is incorrect';
+			}
+		
 		}
 		else 
 		{
