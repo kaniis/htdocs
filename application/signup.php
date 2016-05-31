@@ -13,7 +13,7 @@ if(isset($_POST['signup']))
 	database::connectDb();
 	require '../classes/user.php';
 	$user = new user();
-	$user->signUp($_POST['username'], $_POST['pass1'], $_POST['pass2']);
+	echo $user->signUp($_POST['username'], $_POST['pass1'], $_POST['pass2']);
 
 }
 

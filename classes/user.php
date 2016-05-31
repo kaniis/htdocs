@@ -9,7 +9,7 @@ class user{
 			return 'The passwords do not match.';
 		}
 
-		if(!preg_match('/[a-zA-Z0-9-_]*/', $username))
+		if(!ctype_alnum(str_replace(array('-', '_'), '', $username)))
 		{
 			return 'This username contains forbidden characters. Please stick to alphanumerics, hyphens, and underscores.';
 		}
