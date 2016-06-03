@@ -1,6 +1,11 @@
 <?php
+
+session_start();
+
 require 'classes/mysql.php';
 database::connectDb();
+
+require 'client/404.php';
 
 $result = database::fetchRows('civilization', 'name, leader, id');
 while($resultRow = $result->fetch_row())

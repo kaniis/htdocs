@@ -14,7 +14,6 @@ if(isset($_POST['signup']))
 	require '../classes/user.php';
 	$user = new user();
 	echo $user->signUp($_POST['username'], $_POST['pass1'], $_POST['pass2']);
-
 }
 
 ?>
