@@ -25,18 +25,18 @@ class user{
 		}
 
 		$userRows = database::fetchRows('users', 'id', 'name', $username);
-		if($userRows->num_rows === 1)
-		{
-			return 'This username has already been taken.';
-		}
 
-		else
+		if($userRows->num_rows != 1)
 		{
 			$user['name'] = $username;
 			$user['password'] = $pass;
 			database::addRow('users', $user);
 			require 'router.php';
-			router::redirect('index.php');
+			router::redirect('u/' . $username);
+		}
+		else
+		{
+			return 'This username has already been taken.';
 		}
 	}
 

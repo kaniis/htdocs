@@ -78,5 +78,21 @@ class database{
 		return $result;
 	}
 
+	public static function updateRow($table, $target, $changeTo, $condition, $condValue)
+	{
+		$changeToType = '';
+		$change = '';
+		$i = 0;
+
+		foreach($target as $key => $value)
+		{
+			$change .= $value . '= ?,';
+			$changeToType .= gettype($changeTo[$i++])[0];
+		}
+		$query = 'UPDATE ' . $table . ' SET ' . rtrim($change, ',') . ' WHERE ' . $condition . ' = ?';
+		echo $query;
+		//call_user_func_array(array($stmt, 'bind_param'), $tmp);
+	}
+
 }
 ?>
