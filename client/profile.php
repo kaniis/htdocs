@@ -6,8 +6,8 @@ require '../classes/mysql.php';
 require '../classes/router.php';
 
 database::connectDb();
-$result = database::fetchRows('users', 'name, fav_civ, tag',  'name', $_GET['user']);
-$userRow = $result->fetch_row();
+$result = database::fetchRows('users', 'name, fav_civ, tag, id',  'name', $_GET['user']);
+$userRow = $result->fetch_assoc();
 
 if($userRow == null)
 {
@@ -17,19 +17,35 @@ if($userRow == null)
 
 if(isset($_POST['edit']))
 {
-	$target = array('name', 'place');
-	$changeTo = array('John', 'Mongolia');
-	database::updateRow('users', $target, $changeTo, 'id', 5);
+	$target = array();
+	$changeTo = array();
+
+	if(isset($_POST['favCiv']))
+	{
+		$target[] = 'fav_civ';
+		$changeTo[] = $_POST['favCiv'];
+	}
+
+	if(isset($_POST['tag']))
+	{
+		$target[] = 'tag';
+		$changeTo[] = $_POST['tag'];
+	}
+
+	database::updateRow('users', $target, $changeTo, 'id', $userRow['id']);
+	
+	$result = database::fetchRows('users', 'name, fav_civ, tag, id',  'name', $_GET['user']);
+	$userRow = $result->fetch_assoc();
 }
 
 if(isset($_GET['edit']))
 {
-	echo '<form method="post" action="/u/', $userRow[0] ,'">';
+	echo '<form method="post" action="/u/', $userRow['name'] ,'">';
 }
 
-if($userRow[1] != 0)
+if($userRow['fav_civ'] != 0 || isset($_GET['edit']))
 {
-	$favRow = database::idToValue('civilization', 'name', $userRow[1]);
+	$favRow = database::idToValue('civilization', 'name', $userRow['fav_civ']);
 	if($favRow != null)
 	{
 		if(file_exists('../images/' . $favRow[0] .'.jpg'))
@@ -40,38 +56,39 @@ if($userRow[1] != 0)
 		{
 			echo '<img src="/images/'.$favRow[0].'.png"></img><br/>';
 		}
+	}
 
-		if(isset($_GET['edit']))
+	if(isset($_GET['edit']))
+	{
+		echo 'Favourite civ:<select name="favCiv"><option disabled selected value>Select a civ</option>';
+		$result = database::fetchRows('civilization', 'name');
+		$i = 1;
+
+		while($civRow = $result->fetch_row())
 		{
-			echo 'Favourite civ:<select name="FavCiv">';
-			$result = database::fetchRows('civilization', 'name');
-			$i = 1;
-
-			while($civRow = $result->fetch_row())
-			{
-				
-				echo '<option name="', $i++,'">', $civRow[0], '</option>';
-			}
-
-			echo '</select><br/>';
+			echo '<option value="', $i++,'">', $civRow[0], '</option>';
 		}
-		else
-		{
-			echo 'Favourite civ: ' , $favRow[0] . '<br/>';
-		}
+
+		echo '</select><br/>';
+	}
+	else
+	{
+		echo 'Favourite civ: ' , $favRow[0] . '<br/>';
 	}
 }
 
-echo $userRow[0],' <em>', $userRow[2],'</em><br/>';
+echo $userRow['name'];
 
 if(isset($_GET['edit']))
 {
+	echo ' <input type="text" name="tag" placeholder="Personal tag" value="', $userRow['tag'],'"><br/>';
 	echo '<input type="submit" value="Edit" name="edit"></form>';
-	echo '<a href="/u/', $userRow[0],'">cancel</a>';
+	echo '<a href="/u/', $userRow['name'],'">cancel</a>';
 }
 else
 {
-	echo '<a href="/u/', $userRow[0], '/edit">Edit profile</a>';
+	echo ' <em>', $userRow['tag'],'</em><br/>';
+	echo '<a href="/u/', $userRow['name'], '/edit">Edit profile</a>';
 }
 
 ?>

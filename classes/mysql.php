@@ -83,15 +83,35 @@ class database{
 		$changeToType = '';
 		$change = '';
 		$i = 0;
+		$values = array();
+		$valueTypes[0] = '';
 
 		foreach($target as $key => $value)
 		{
-			$change .= $value . '= ?,';
+			$change .= $value . ' = ?, ';
 			$changeToType .= gettype($changeTo[$i++])[0];
 		}
-		$query = 'UPDATE ' . $table . ' SET ' . rtrim($change, ',') . ' WHERE ' . $condition . ' = ?';
-		echo $query;
-		//call_user_func_array(array($stmt, 'bind_param'), $tmp);
+
+		foreach($changeTo as $key => $value)
+		{
+			$values[] = $value;
+			$valueTypes[0] .= gettype($value)[0];
+		}
+		$valueTypes[0] .= gettype($condValue)[0];
+
+		$params = array_merge($valueTypes, $values);
+		$params[] = $condValue;
+		$tmp = array();
+
+		foreach($params as $key => $value)
+		{
+			$tmp[$key] = &$params[$key];
+		}
+
+		$query = 'UPDATE ' . $table . ' SET ' . rtrim($change, ', ') . ' WHERE ' . $condition . ' = ?';
+		$stmt = self::$db->prepare($query);
+		call_user_func_array(array($stmt, 'bind_param'), $tmp);
+		$stmt->execute();
 	}
 
 }
