@@ -46,7 +46,6 @@ class database{
 
 	public static function connectDb()
 	{
-
 		self::$db = new mysqli('localhost', 'root', 'admin', 'school');
 	}
 
@@ -64,6 +63,45 @@ class database{
 		{
 			$vartype = gettype($value);
 			$stmt->bind_param($vartype[0], $value);
+		}
+
+		$stmt->execute();
+		return $stmt->get_result();
+	}
+
+	public static function searchRows($table, $target, $condition, $condValue)
+	{
+		$query = 'SELECT ' . $target . ' FROM ' . $table;
+		if (is_array($condition))
+		{
+			$query .= ' WHERE ';
+			$vartype[0] = '';
+			$values = array();
+			foreach($condition as $key => $value)
+			{
+				$query .= $value . ' LIKE ? OR ';
+				$vartype[0] .= gettype($condValue)[0];
+				$values[] = '%' . $condValue . '%';
+			}
+			$query = rtrim($query, ' OR ');
+			$stmt = self::$db->prepare($query);
+
+			$values = array_merge($vartype, $values);
+			$tmp = array();
+			foreach($values as $key => $value)
+			{
+				$tmp[$key] = &$values[$key];
+			}
+
+			call_user_func_array(array($stmt, 'bind_param'), $tmp);
+		}
+		else
+		{
+			$query .= ' WHERE ' . $condition . ' LIKE ?';
+			$vartype = gettype($condValue)[0];
+			$condValue =  '%' . $condValue . '%';
+			$stmt = self::$db->prepare($query);
+			$stmt->bind_param($vartype[0], $condValue);
 		}
 
 		$stmt->execute();

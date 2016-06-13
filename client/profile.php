@@ -6,12 +6,12 @@ require '../classes/mysql.php';
 require '../classes/router.php';
 
 database::connectDb();
-$result = database::fetchRows('users', 'name, fav_civ, tag, id',  'name', $_GET['user']);
+$result = database::fetchRows('users', 'id, admin, name, fav_civ, tag',  'name', $_GET['user']);
 $userRow = $result->fetch_assoc();
 
 if($userRow == null)
 {
-	$_SESSION['notFound'] = '';
+	$_SESSION['pageNotFound'] = '';
 	router::redirect('');
 }
 
@@ -34,9 +34,11 @@ if(isset($_POST['edit']))
 
 	database::updateRow('users', $target, $changeTo, 'id', $userRow['id']);
 	
-	$result = database::fetchRows('users', 'name, fav_civ, tag, id',  'name', $_GET['user']);
+	$result = database::fetchRows('users', 'id, admin, name, fav_civ, tag',  'name', $_GET['user']);
 	$userRow = $result->fetch_assoc();
 }
+
+$userStatus = array('Default user', 'Admin');
 
 if(isset($_GET['edit']))
 {
@@ -88,7 +90,17 @@ if(isset($_GET['edit']))
 else
 {
 	echo ' <em>', $userRow['tag'],'</em><br/>';
-	echo '<a href="/u/', $userRow['name'], '/edit">Edit profile</a>';
+	echo $userStatus[$userRow['admin']], '<br/>';
+	if(isset($_SESSION['user']))
+	{
+		$result = database::fetchRows('users', 'admin', 'name', $_SESSION['user']);
+		$currentUserRow = $result->fetch_assoc();
+
+		if($_SESSION['user'] == $userRow['name'] || $currentUserRow['admin'] > 0)
+		{
+			echo '<a href="/u/', $userRow['name'], '/edit">Edit profile</a>';
+		}
+	}
 }
 
 ?>
