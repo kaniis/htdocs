@@ -1,5 +1,8 @@
-body{
+*{
 font-family: Roboto;
+}
+
+body{
 margin: 0px;
 padding: 0px;
 background-color: #5C6BC0;
@@ -43,13 +46,13 @@ div#main > div{
 margin: 5px 30px 15px 40px;
 padding: 5px 0 5px 25px;
 background-color: #fff;
-box-shadow: 5px 5px 5px -4px #000;
-transistion: box-shadow 1s;
+box-shadow: 5px 5px 7px -4px #000;
+transition: box-shadow 0.5s;
 position: relative;
 }
 
 div#main > div:hover{
-box-shadow: 5px 5px 7px -4px #000;
+box-shadow: 5px 5px 18px -4px #000;
 }
 
 div#main div > p.text{
@@ -90,6 +93,7 @@ z-index: 5;
 div#picture > img{
 position: relative;
 top: -300px;
+width: 100%;
 }
 
 div#info{
@@ -122,9 +126,10 @@ div#info > ul > li:last-child{
 float: right;
 }
 
-div#rbutton{
+#rbutton{
+top: 0;
 margin-left: 90%;
-margin-top: 60%;
+margin-top: 44%;
 position: fixed;
 z-index: 20;
 }
@@ -137,7 +142,7 @@ height: 100%;
 .circle{
 width:100px;
 height:100px;
-border-radius:50px;
+border-radius:50%;
 font-size:20px;
 color:#fff;
 line-height:100px;

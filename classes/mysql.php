@@ -1,5 +1,6 @@
 <?php
-class database{
+class database
+{
 	private static $db;
 	public static function addRow($table, $values)
 	{

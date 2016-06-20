@@ -1,8 +1,4 @@
 <?php
-require '../classes/mysql.php';
-database::connectDb();
-
-session_start();
 
 function randDupCiv()
 {
@@ -41,40 +37,49 @@ function randUniCiv()
 	return $civs;
 }
 
-?>
+echo 	'<div class="content">
+		<p class="title">Select a generation mode.</p>
+		<p class="text">';
+echo 	'<form method="post" action="/RandomGame">
+		<select name="mode">
+			<option selected disabled>Select a mode</option>
+			<option value="0">Unique civs</option>
+			<option value="1">Allow duplicates</option>
+		</select>
+		<input type="submit" name="randomMode" value="Set">
+	</form>';
 
-<form method="post" action="/application/randomgame.php">
-	<select name="mode">
-		<option selected disabled>Select a mode</option>
-		<option value="0">Unique civs</option>
-		<option value="1">Allow duplicates</option>
-	</select>
-	<input type="submit" name="randomMode" value="Set">
-</form>
-
-<?php
-
-if(isset($_POST['randomMode']))
+if(isset($_POST['randomMode']) && isset($_POST['mode']))
 {
 	$_SESSION['mode'] = $_POST['mode'];
 	$_SESSION['randomMode'] = '';
 }
 
+if(isset($_SESSION['mode']))
+{
+	$randomMode = array('Unique civs only', 'Duplicate civs allowed');
+	echo 'Mode: ', $randomMode[$_SESSION['mode']], '<br/>';
+}
+
+echo '</p></div>';
+
+echo '<div class="content">
+		<p class="title">Results</p>
+		<p class="text">';
+
 if(isset($_SESSION['randomMode']))
 {
-	$randomMode = array('only uniques', 'allow duplicates');
 
-	if($randomMode[$_SESSION['mode']] == 'only uniques')
+	if($_SESSION['mode'] == 0)
 	{
 		$civs = randUniCiv();
 	}
-	elseif($randomMode[$_SESSION['mode']] == 'allow duplicates')
+	elseif($_SESSION['mode'] == 1)
 	{
 		$civs = randDupCiv();
 	}
 
-	echo 'Mode: ', $randomMode[$_SESSION['mode'] ], '<br/>';
-	echo '<a href="randomGame.php">Reroll</a><br/><br/>';
+	echo '<a href="/?randGame=true">Reroll</a><br/><br/>';
 
 	$player = 1;
 
@@ -96,9 +101,8 @@ if(isset($_SESSION['randomMode']))
 
 	$paces = ['quick', 'standard', 'epic', 'marathon'];
 	echo 'Game pace: ', $paces[rand(0,3)];
+
+	echo '</p></div>';
 }
-else
-{
-	echo 'Please select a mode.';
-}
+
 ?>

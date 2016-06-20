@@ -14,12 +14,12 @@ class user{
 			return 'This username contains forbidden characters. Please stick to alphanumerics, hyphens, and underscores.';
 		}
 
-		if(strlen($username) < 4 || strlen($username) > 32)
+		if(strlen(trim($username)) < 4 || strlen(trim($username)) > 32)
 		{
 			return 'Your username is either too short or too long. It has to consist of 4-32 characters.';
 		}
 
-		if(strlen($pass) < 4 || strlen($pass) > 32)
+		if(strlen(trim($pass)) < 4 || strlen(trim($pass)) > 32)
 		{
 			return 'This is not a valid password (too short or too long).';
 		}
@@ -28,10 +28,11 @@ class user{
 
 		if($userRows->num_rows != 1)
 		{
-			$user['name'] = $username;
-			$user['password'] = $pass;
+			$user['name'] = trim($username);
+			$user['password'] = trim($pass);
 			database::addRow('users', $user);
-			require 'router.php';
+			$_SESSION['user'] = $username;
+			$_SESSION['loggedIn'] = true;
 			router::redirect('u/' . $username);
 		}
 		else

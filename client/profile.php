@@ -1,14 +1,5 @@
 <?php
 
-session_start();
-
-require '../classes/mysql.php';
-require '../classes/router.php';
-
-database::connectDb();
-$result = database::fetchRows('users', 'id, admin, name, fav_civ, tag',  'name', $_GET['user']);
-$userRow = $result->fetch_assoc();
-
 if($userRow == null)
 {
 	$_SESSION['pageNotFound'] = '';
@@ -42,27 +33,28 @@ $userStatus = array('Default user', 'Admin');
 
 if(isset($_GET['edit']))
 {
-	echo '<form method="post" action="/u/', $userRow['name'] ,'">';
+	$result = database::fetchRows('users', 'admin', 'name', $_SESSION['user']);
+	$currentUserRow = $result->fetch_assoc();
+	if(!($_SESSION['user'] == $userRow['name'] || ($currentUserRow['admin'] > 0 && (($userRow['admin'] == 1 && $userRow['name'] == $_SESSION['user']) || ($userRow['admin'] == 0)))))
+	{
+		router::redirect('u/' . $userRow['name']);
+	}
+
+	echo '<form method="post" action="/u/', $userRow['name'], '">';
+	echo '<input type="text" name="tag" placeholder="Personal tag" value="', $userRow['tag'],'"><br/>';
+}
+else
+{
+	echo ' <em>', $userRow['tag'],'</em><br/>';
 }
 
 if($userRow['fav_civ'] != 0 || isset($_GET['edit']))
 {
 	$favRow = database::idToValue('civilization', 'name', $userRow['fav_civ']);
-	if($favRow != null)
-	{
-		if(file_exists('../images/' . $favRow[0] .'.jpg'))
-		{
-			echo '<img src="/images/'.$favRow[0].'.jpg"></img><br/>';
-		}
-		elseif(file_exists('../images/' . $favRow[0].'.png'))
-		{
-			echo '<img src="/images/'.$favRow[0].'.png"></img><br/>';
-		}
-	}
 
 	if(isset($_GET['edit']))
 	{
-		echo 'Favourite civ:<select name="favCiv"><option disabled selected value>Select a civ</option>';
+		echo 'Favourite civ:<select name="favCiv"><option disabled selected>Select a civ</option>';
 		$result = database::fetchRows('civilization', 'name');
 		$i = 1;
 
@@ -79,24 +71,20 @@ if($userRow['fav_civ'] != 0 || isset($_GET['edit']))
 	}
 }
 
-echo $userRow['name'];
-
 if(isset($_GET['edit']))
 {
-	echo ' <input type="text" name="tag" placeholder="Personal tag" value="', $userRow['tag'],'"><br/>';
 	echo '<input type="submit" value="Edit" name="edit"></form>';
 	echo '<a href="/u/', $userRow['name'],'">cancel</a>';
 }
 else
 {
-	echo ' <em>', $userRow['tag'],'</em><br/>';
 	echo $userStatus[$userRow['admin']], '<br/>';
 	if(isset($_SESSION['user']))
 	{
 		$result = database::fetchRows('users', 'admin', 'name', $_SESSION['user']);
 		$currentUserRow = $result->fetch_assoc();
 
-		if($_SESSION['user'] == $userRow['name'] || $currentUserRow['admin'] > 0)
+		if($_SESSION['user'] == $userRow['name'] || ($currentUserRow['admin'] > 0 && (($userRow['admin'] == 1 && $userRow['name'] == $_SESSION['user']) || ($userRow['admin'] == 0))))
 		{
 			echo '<a href="/u/', $userRow['name'], '/edit">Edit profile</a>';
 		}

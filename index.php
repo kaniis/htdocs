@@ -1,92 +1,76 @@
 <?php
 
+require 'classes/mysql.php';
+require 'classes/elements.php';
+require 'classes/router.php';
+database::connectDb();
 session_start();
 
-require 'classes/mysql.php';
-database::connectDb();
-
-if(isset($_GET['logOut']))
-{
-	unset($_SESSION['loggedIn']);
-	unset($_SESSION['user']);
-	require 'classes/router.php';
-	router::redirect('');
-}
-
-require 'client/404.php';
-
 ?>
 
-<form method="post" action="/">
-	<input type="text" name="query" placeholder="Search civ">
-	<input type="submit" name="homeSearch" value="Search">
-</form>
+<! DOCTYPE html>
+<html>
 
-<?php
+	<head>
 
-if(isset($_POST['homeSearch']))
-{
-	if(strlen($_POST['query']) > 2)
-	{
-		$condition = array('name', 'leader', 'culture');
-		$result = database::searchRows('civilization', 'id', $condition, $_POST['query']);
-		$searchIds = array();
-		while($resultRow = $result->fetch_row())
+		<title>Main Page</title>
+
+		<link rel="stylesheet" type="text/css" href="/style/main.css" />
+
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+	</head>
+
+	<body>
+
+		<div id="info">
+			<ul>
+				<li style="float: right">
+					<?php
+						require 'application/login.php';
+					?>
+				</li>
+				<li style="float: left">
+					<?php
+						if(isset($_SESSION['loggedIn']))
+						{
+							$url = router::createUserUrl($_SESSION['user']);
+							echo '<a href="', $url ,'">', $_SESSION['user'], '</a>';
+						}
+						else
+						{
+							echo '<a href="/SignUp">Sign up!</a>';
+						}
+					?>
+				</li>
+			</ul>
+		</div>
+		<div id="picture">
+			<img src="/images/civvscreen.jpg" />
+		</div>
+		<div id="menu">
+
+			<ul>
+				<li><a href="/">Main Page</a></li>
+				<li><a href="/Search">Search</a></li>
+				<li><a href="/RandomGame">Random Game</a></li>
+				<li><a href="/AdminPanel">Administrator</a></li>
+			</ul>
+		</div>
+		<div id="main">
+			<?php
+				require 'core.php';
+			?>
+		</div>
+
+		<?php
+
+		if(isset($_SESSION['loggedIn']))
 		{
-			$searchIds[] = $resultRow['0'];
+			echo elements::userButton($_SESSION['user']);
 		}
 
-		$result = database::searchRows('uniques', 'civ_id', 'name', $_POST['query']);
-		while($resultRow = $result->fetch_row())
-		{
-			$searchIds[] = $resultRow['0'];
-		}
+		?>
+		
+	</body>
 
-		$searchIds = array_unique($searchIds);
-		if($searchIds[0] == '')
-		{
-			$_SESSION['queryNotFound'] = true;
-			require 'classes/router.php';
-			router::redirect('');
-		}
-
-		foreach($searchIds as $key => $value)
-		{
-			$result = database::fetchRows('civilization', 'name, leader, id', 'id', $value);
-			while($resultRow = $result->fetch_row())
-			{
-				echo $resultRow[0], ' - ', $resultRow[1];
-				$unique = database::fetchRows('uniques', 'name, description, type', 'civ_id', $resultRow[2]);
-				while($uniquesRow = $unique->fetch_row())
-				{
-					echo '<br/>', $uniquesRow[0],' (', $uniquesRow[2], '):<br/>', $uniquesRow[1];
-				}
-				echo '<br/><br/>';
-			}
-		}
-
-		echo '<a href="/">Show all</a>';
-	}
-	else
-	{
-		$_SESSION['queryNotFound'] = true;
-		require 'classes/router.php';
-		router::redirect('');
-	}
-}
-else
-{
-	$result = database::fetchRows('civilization', 'name, leader, id');
-	while($resultRow = $result->fetch_row())
-	{
-		echo $resultRow[0], ' - ', $resultRow[1];
-		$unique = database::fetchRows('uniques', 'name, description, type', 'civ_id', $resultRow[2]);
-		while($uniquesRow = $unique->fetch_row())
-		{
-			echo '<br/>', $uniquesRow[0],' (', $uniquesRow[2], '):<br/>', $uniquesRow[1];
-		}
-		echo '<br/><br/>';
-	}
-}
-
-?>
+</html>

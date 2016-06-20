@@ -1,6 +1,7 @@
 RewriteEngine On
-RewriteRule ^u/([a-zA-Z0-9_-]+)$ client/profile.php?user=$1
-RewriteRule ^u/([a-zA-Z0-9_-]+)/edit$ client/profile.php?user=$1&edit=true
-RewriteRule ^/$ index.php
-RewriteRule ^([a-zA-Z0-9_-]+)/([0-9]+)$ users.php?user=$1&page=$2
-RewriteRule ^([a-zA-Z0-9_-]+)/([0-9]+)/$ users.php?user=$1&page=$2
+RewriteRule ^u/([a-zA-Z0-9_-]+)$ /?user=$1
+RewriteRule ^u/([a-zA-Z0-9_-]+)/edit$ /?user=$1&edit=true
+RewriteRule ^SignUp /?signUp=true
+RewriteRule ^Search /?search=true
+RewriteRule ^RandomGame /?randGame=true
+RewriteRule ^AdminPanel /?admin=true
