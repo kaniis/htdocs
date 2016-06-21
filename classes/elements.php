@@ -15,6 +15,10 @@ class elements
 		{
 			$pictureUrl = '/images/' . $civRow['0'] . '.jpg';
 		}
+		elseif(file_exists('images/' . $civRow['0'] . '.png'))
+		{
+			$pictureUrl = '/images/' . $civRow['0'] . '.png';
+		}
 		else
 		{
 			$pictureUrl = '/images/civ.jpg';

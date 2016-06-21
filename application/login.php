@@ -26,7 +26,7 @@ if (isset($_POST['submit']))
 			}
 			else
 			{
-				echo '<br />' . '<p style="display: inline;">Incorrect username or password</p>';
+				echo '<p style="display: inline;">Incorrect username or password</p>';
 			}
 
 		}

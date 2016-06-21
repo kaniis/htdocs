@@ -25,21 +25,24 @@ if(isset($_POST['homeSearch']))
 			router::redirect('Search');
 		}
 
+		echo '<div class="content">
+				<p class="title">Search for civs</p>
+				<p class="text">';
+		require 'client/404.php';
+		echo			'<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
+						<input type="text" name="query" placeholder="Search civ">
+						<input type="submit" name="homeSearch" value="Search">
+					</form>
+					<a href="/Search">Show all</a>
+				</p>
+			</div>';
+
 		foreach($searchIds as $key => $value)
 		{
+
 			$result = database::fetchRows('civilization', 'name, leader, id', 'id', $value);
 			while($resultRow = $result->fetch_row())
 			{
-				echo '<div class="content">
-						<p class="text">';
-							require 'client/404.php';
-				echo			'<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
-								<input type="text" name="query" placeholder="Search civ">
-								<input type="submit" name="homeSearch" value="Search">
-							</form>
-							<a href="/Search">Show all</a>
-						</p>
-					</div>';
 				echo '<div class="content">
 					<p class="text">';
 				echo $resultRow[0], ' - ', $resultRow[1];
@@ -62,6 +65,7 @@ if(isset($_POST['homeSearch']))
 else
 {
 	echo '<div class="content">
+			<p class="title">Search for civs</p>
 			<p class="text">';
 				require 'client/404.php';
 	echo			'<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">

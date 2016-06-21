@@ -44,10 +44,10 @@ background-color: #5C6BC0;
 
 div#main > div{
 margin: 5px 30px 15px 40px;
-padding: 5px 0 5px 25px;
+padding: 5px 25px;
 background-color: #fff;
 box-shadow: 5px 5px 7px -4px #000;
-transition: box-shadow 0.5s;
+transition: box-shadow 0.3s;
 position: relative;
 }
 
@@ -56,13 +56,11 @@ box-shadow: 5px 5px 18px -4px #000;
 }
 
 div#main div > p.text{
-margin-right: 300px;
 font-weight: 300;
 text-align: justify
 }
 
 div#main div  > p.title{
-margin-right: 300px;
 font-weight: 500;
 }
 
@@ -70,9 +68,15 @@ div#main > div.image{
 min-height: 250px;
 }
 
-div#main > div.image > img{
+div.image
+{
 width: 200px;
-height: 200px;
+height: 300px;
+}
+
+div.image > img{
+width: 200px;
+height: 300px;
 position: absolute; 
 top: 25px;
 right: 25px;
@@ -80,6 +84,7 @@ right: 25px;
 
 div#picture{
 width: 100%;
+min-width: 1500px;
 height: 150px;
 margin-top: 30px;
 background-color: #fff;
@@ -126,11 +131,19 @@ div#info > ul > li:last-child{
 float: right;
 }
 
+a{
+text-decoration: none;
+font-weight: 400;
+color: #000;
+}
+a:hover{
+color: #aaa;
+}
+
 #rbutton{
-top: 0;
-margin-left: 90%;
-margin-top: 44%;
 position: fixed;
+bottom: 10px;
+right: 10px;
 z-index: 20;
 }
 
@@ -149,4 +162,18 @@ line-height:100px;
 text-align:center;
 background:#000;
 box-shadow: 0 0 10px #000;
+}
+
+input#form
+{
+margin: 5px 0;
+}
+
+textarea
+{
+margin: 5px 0;
+min-height: 100px;
+max-height: 100px;
+min-width:500px;
+max-width: 500px;
 }

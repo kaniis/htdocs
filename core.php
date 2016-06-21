@@ -31,5 +31,17 @@ elseif(isset($_GET['admin']))
 {
 	require 'application/admin.php';
 }
+elseif(isset($_GET['sexiness']))
+{
+	echo '<div class="content">
+			<p class="title">Welcome to heaven</p>
+			<p class="text">Myfi yw Buddug, Brenhines y Celtiaid. Peidied neb â\'m tanbrisio i!</p>
+			<div class="image"><img src="images/extras/boudicca.jpg"></div>
+	</div>';
+}
+else
+{
+	require 'application/frontpage.php';
+}
 
 ?>

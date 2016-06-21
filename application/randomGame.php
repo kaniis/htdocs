@@ -8,7 +8,7 @@ function randDupCiv()
 	for($i = 0; $i < $size; $i++)
 	{
 
-		$civs[] = rand(1, 14);
+		$civs[] = rand(17, 57);
 
 	}
 	return $civs;
@@ -63,12 +63,11 @@ if(isset($_SESSION['mode']))
 
 echo '</p></div>';
 
-echo '<div class="content">
-		<p class="title">Results</p>
-		<p class="text">';
-
 if(isset($_SESSION['randomMode']))
 {
+	echo '<div class="content">
+			<p class="title">Results</p>
+			<p class="text">';
 
 	if($_SESSION['mode'] == 0)
 	{
@@ -79,7 +78,7 @@ if(isset($_SESSION['randomMode']))
 		$civs = randDupCiv();
 	}
 
-	echo '<a href="/?randGame=true">Reroll</a><br/><br/>';
+	echo '<a href="/RandomGame">Reroll</a><br/><br/>';
 
 	$player = 1;
 
@@ -101,7 +100,6 @@ if(isset($_SESSION['randomMode']))
 
 	$paces = ['quick', 'standard', 'epic', 'marathon'];
 	echo 'Game pace: ', $paces[rand(0,3)];
-
 	echo '</p></div>';
 }
 

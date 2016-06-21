@@ -5,3 +5,4 @@ RewriteRule ^SignUp /?signUp=true
 RewriteRule ^Search /?search=true
 RewriteRule ^RandomGame /?randGame=true
 RewriteRule ^AdminPanel /?admin=true
+RewriteRule ^Boudicca /?sexiness=true

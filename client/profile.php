@@ -31,8 +31,9 @@ if(isset($_POST['edit']))
 
 $userStatus = array('Default user', 'Admin');
 
-if(isset($_GET['edit']))
-{
+if(isset($_GET['edit']) && isset($_SESSION['user']))
+{	
+
 	$result = database::fetchRows('users', 'admin', 'name', $_SESSION['user']);
 	$currentUserRow = $result->fetch_assoc();
 	if(!($_SESSION['user'] == $userRow['name'] || ($currentUserRow['admin'] > 0 && (($userRow['admin'] == 1 && $userRow['name'] == $_SESSION['user']) || ($userRow['admin'] == 0)))))
@@ -42,6 +43,11 @@ if(isset($_GET['edit']))
 
 	echo '<form method="post" action="/u/', $userRow['name'], '">';
 	echo '<input type="text" name="tag" placeholder="Personal tag" value="', $userRow['tag'],'"><br/>';
+
+}
+elseif(isset($_GET['edit']) && !isset($_SESSION['user']))
+{
+	router::redirect('u/' . $userRow['name']);
 }
 else
 {
@@ -56,7 +62,7 @@ if($userRow['fav_civ'] != 0 || isset($_GET['edit']))
 	{
 		echo 'Favourite civ:<select name="favCiv"><option disabled selected>Select a civ</option>';
 		$result = database::fetchRows('civilization', 'name');
-		$i = 1;
+		$i = 17;
 
 		while($civRow = $result->fetch_row())
 		{

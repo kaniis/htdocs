@@ -1,10 +1,10 @@
 <?php
 
 echo	'<form method="post" action="', $_SERVER['REQUEST_URI'], '">
-		<input type="text" name="username" placeholder="Username"></br>
-		<input type="password" name="pass1" placeholder="Password"></br>
-		<input type="password" name="pass2" placeholder="Repeat password"></br>
-		<input type="submit" name="signup"/>
+		<input id="form" type="text" name="username" placeholder="Username"></br>
+		<input id="form" type="password" name="pass1" placeholder="Password"></br>
+		<input id="form" type="password" name="pass2" placeholder="Repeat password"></br>
+		<input id="form" type="submit" name="signup"/>
 	</form>';
 
 if(isset($_POST['signup']))

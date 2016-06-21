@@ -45,10 +45,12 @@ session_start();
 			</ul>
 		</div>
 		<div id="picture">
-			<img src="/images/civvscreen.jpg" />
+			<img src="/images/extras/civvscreen.jpg" />
 		</div>
 		<div id="menu">
-
+			<div style="position: fixed; bottom: 3px; width: 180px">
+				<p style=" font-size: 10px; text-align: center;">Made by: Kaan Akbaba & Rens Kievit</p>
+			</div>
 			<ul>
 				<li><a href="/">Main Page</a></li>
 				<li><a href="/Search">Search</a></li>
